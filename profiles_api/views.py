@@ -2,8 +2,11 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework import viewsets
+from rest_framework.authentication import TokenAuthentication
 
 from profiles_api import serializers
+from profiles_api import models
+from  profiles_api import permission
 
 
 # Create your views here.
@@ -12,7 +15,7 @@ class HelloApiView(APIView):
     """Test API View"""
     serializers_class = serializers.HelloSerializer
 
-    def get(self, request, formate=None):
+    def get(self, request, pk=None):
         """Returen a list of APIView features"""
         an_apiview = [
             'Uses HTTP method as function (get, post, patch, put, delete)',
@@ -34,25 +37,25 @@ class HelloApiView(APIView):
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     def put(self, request, pk=None):
-        """"Handel updating request"""
+        """Handel updating request"""
         return Response({'method': 'PUT'})
 
     def patch(self, request, pk=None):
-        """"Handel updating request"""
+        """Handel updating request"""
         return Response({'method': 'PATCH'})
 
     def delete(self, request, pk=None):
-        """"Handel updating request"""
+        """Handel updating request"""
         return Response({'method': 'DELETE'})
 
 
 class HelloViewSet(viewsets.ViewSet):
-    """"Test Api ViewSet"""
+    """Test Api ViewSet"""
 
     serializers_class = serializers.HelloSerializer
 
     def list(self, request):
-        """"Return a hello message"""
+        """Return a hello message"""
         a_viewset = [
             'User action (list, create, retrieve, update, partial_update)',
             'Automatically maps to URLs using routers',
@@ -86,3 +89,13 @@ class HelloViewSet(viewsets.ViewSet):
     def destroy(self, request, pk=None):
         """Handle delete an object"""
         return Response({'method': 'DELETE'})
+
+
+class UserProfileViewSet(viewsets.ModelViewSet):
+    """Handle creating, creating and updating profiles"""
+    serializer_class = serializers.UserProfileSerializer
+    queryset = models.UserProfile.objects.all()
+    authentication_classes = (TokenAuthentication, )
+    permission_classes = (permission.UpdateOwnProfile, )
+
+
