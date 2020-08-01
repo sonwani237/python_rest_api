@@ -5,7 +5,7 @@ set -e
 # TODO: Set to URL of git repo.
 PROJECT_GIT_URL='https://github.com/sonwani237/python_rest_api.git'
 
-PROJECT_BASE_PATH='usr/local/apps/profiles-rest-api'
+PROJECT_BASE_PATH='/usr/local/apps/profiles-rest-api'
 
 echo "Installing dependencies..."
 apt-get update
@@ -35,9 +35,9 @@ supervisorctl update
 supervisorctl restart profiles_api
 
 # Configure nginx
-cp $PROJECT_BASE_PATH/deploy/nginx_profiles_api.conf /etc/nginx/sites-available/profiles_api.conf
+cp $PROJECT_BASE_PATH/deploy/nginx_profiles_api.conf/ etc/nginx/sites-available/profiles_api.conf
 rm /etc/nginx/sites-enabled/default
-ln -s /etc/nginx/sites-available/profiles_api.conf /etc/nginx/sites-enabled/profiles_api.conf
+ln -s /etc/nginx/sites-available/profiles_api.conf/ etc/nginx/sites-enabled/profiles_api.conf
 systemctl restart nginx.service
 
 echo "DONE! :)"
